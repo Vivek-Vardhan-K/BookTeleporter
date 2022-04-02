@@ -7,6 +7,7 @@ import re
 import urllib.request as urllib2
 from fake_useragent import UserAgent
 import requests
+import os
 from tqdm import tqdm
 
 import smtplib
@@ -48,7 +49,7 @@ def portBookToKindle(book_name):
 	msg['From'] = fromaddr
 	msg['To'] = toaddr
 	filename = book_name+".pdf";
-	attachment = open("/home/godspeed/Desktop/"+filename, "rb")
+	attachment = open(os.getcwd()+filename, "rb")
 	p = MIMEBase('application', 'octet-stream')
 	p.set_payload((attachment).read())
 	encoders.encode_base64(p)
@@ -77,5 +78,3 @@ book_idx=int(book_idx);
 book_name=results[book_idx-1]['Title'];
 downloadBook(links[book_idx-1],book_name);
 portBookToKindle(book_name);
-
-
