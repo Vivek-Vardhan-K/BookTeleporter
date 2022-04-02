@@ -15,3 +15,9 @@ A huge thanks to Libgen api for making this possible and making world a better p
 
 ## Password Security
 - you can see for yourself how secure is the code before inputting password. 
+
+## How to run:
+use below command:
+```
+python libsearch.py "book name here"
+```
