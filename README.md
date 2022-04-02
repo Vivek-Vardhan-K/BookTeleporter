@@ -21,3 +21,6 @@ use below command:
 ```
 python libsearch.py "book name here"
 ```
+
+
+#### Note: Check dependencies before running
