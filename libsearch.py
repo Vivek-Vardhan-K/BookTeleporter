@@ -67,7 +67,7 @@ def portBookToKindle(book_name):
 	s.quit()
 	os.remove(filename)
 s = LibgenSearch()
-text=input("Enter Book Name or Keyword : ");
+text=raw_input("Enter Book Name or Keyword : ");
 title_filters = {"Extension": "pdf","Language": "English"}
 results = s.search_title_filtered(text,title_filters,exact_match=True);
 i=1;
