@@ -65,6 +65,7 @@ def portBookToKindle(book_name):
 	text = msg.as_string()
 	s.sendmail(fromaddr, toaddr, text)
 	s.quit()
+	os.remove(filename)
 s = LibgenSearch()
 text=input("Enter Book Name or Keyword : ");
 title_filters = {"Extension": "pdf","Language": "English"}
