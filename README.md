@@ -20,7 +20,7 @@ A huge thanks to Libgen api for making this possible and making world a better p
 ## How to run:
 use below command:
 ```
-python libsearch.py "book name here"
+python libsearch.py
 ```
 
 
