@@ -12,6 +12,7 @@ A huge thanks to Libgen api for making this possible and making world a better p
 - Email validation
 - Better search functionality
 - Better UI.
+- OAuth2.0
 
 ## Password Security
 - you can see for yourself how secure is the code before inputting password. 
