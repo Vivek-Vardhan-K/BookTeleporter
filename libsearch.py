@@ -16,6 +16,9 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
+from getpass import getpass
+
+
 #dont use this code for automated testing as it may hammer the server -vivek (author).
 
 def dlinker(link):
@@ -43,13 +46,13 @@ def downloadBook(url: str, fname: str):
 			bar.update(size)
 def portBookToKindle(book_name):
 	print("Sending book: "+ book_name +"to kindle");
-	fromaddr=input("Enter your email address");
-	toaddr=input("Enter your kindle address to send book");
+	fromaddr=input("Enter your email address : ");
+	toaddr=input("Enter your kindle address to send book : ");
 	msg = MIMEMultipart()
 	msg['From'] = fromaddr
 	msg['To'] = toaddr
 	filename = book_name+".pdf";
-	attachment = open(os.getcwd()+filename, "rb")
+	attachment = open(os.getcwd()+"/"+filename, "rb")
 	p = MIMEBase('application', 'octet-stream')
 	p.set_payload((attachment).read())
 	encoders.encode_base64(p)
@@ -57,13 +60,13 @@ def portBookToKindle(book_name):
 	msg.attach(p)
 	s = smtplib.SMTP('smtp.gmail.com', 587)
 	s.starttls()
-	password=input("please enter your email password || incase of two factor auth use generated app password from google");
+	password = getpass('please enter your email password || incase of two factor auth use generated app password from google : ')
 	s.login(fromaddr, password);
 	text = msg.as_string()
 	s.sendmail(fromaddr, toaddr, text)
 	s.quit()
 s = LibgenSearch()
-text=sys.argv[1]
+text=input("Enter Book Name or Keyword : ");
 title_filters = {"Extension": "pdf","Language": "English"}
 results = s.search_title_filtered(text,title_filters,exact_match=True);
 i=1;
