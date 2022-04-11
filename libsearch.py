@@ -45,7 +45,7 @@ def downloadBook(url: str, fname: str):
 			size = file.write(data)
 			bar.update(size)
 def portBookToKindle(book_name):
-	print("Sending book: "+ book_name +"to kindle");
+	print("Sending book: "+ book_name +" to kindle");
 	fromaddr=input("Enter your email address : ");
 	toaddr=input("Enter your kindle address to send book : ");
 	msg = MIMEMultipart()
@@ -67,7 +67,7 @@ def portBookToKindle(book_name):
 	s.quit()
 	os.remove(filename)
 s = LibgenSearch()
-text=raw_input("Enter Book Name or Keyword : ");
+text=input("Enter Book Name or Keyword : ");
 title_filters = {"Extension": "pdf","Language": "English"}
 results = s.search_title_filtered(text,title_filters,exact_match=True);
 i=1;
