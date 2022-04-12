@@ -18,10 +18,13 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 from getpass import getpass
+from flask_cors import CORS, cross_origin
 
 #import libsearch
 app = Flask(__name__)
-  
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 def dlinker(link):
     req = Request(link)
     html_page = urlopen(req)
@@ -31,7 +34,15 @@ def dlinker(link):
         links.append(link.get('href'))
     return links[0];
 
-def downloadBook(url: str, fname: str):
+def linksResolver(res,s):
+	download_links = s.resolve_download_links(res);
+	return download_links["GET"];
+
+@app.route('/download/<fname>', methods = ['GET'])	
+@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
+def downloadBook(fname: str):
+	url=request.headers.get('dlink');
+	fname2=fname
 	fname=fname+".pdf"
 	headers = {'User-Agent': 'Mozilla/5.0'}
 	resp = requests.get(url, stream=True, headers=headers)
@@ -46,14 +57,10 @@ def downloadBook(url: str, fname: str):
 		for data in resp.iter_content(chunk_size=1024):
 			size = file.write(data)
 			bar.update(size)
+	portBookToKindle(fname2);
+	return "200";
 
-@app.route('/', methods = ['GET', 'POST'])
-def home():
-    if(request.method == 'GET'):
-  
-        data = "hello world"
-        return jsonify({'data': data})
-
+@cross_origin()
 @app.route('/search/<name>', methods = ['GET'])
 def getBooks(name):
 	s = LibgenSearch()
@@ -63,15 +70,16 @@ def getBooks(name):
 	links=[];
 	for res in results:
 		print(i,") ",res['Author'],"||",res['Title'],"||",res['Size'],"||",res['Extension']);
-		templink=dlinker(res['Mirror_1'])
+		templink=linksResolver(res,s)
+		print(templink)
 		links.append({'index':i,'Author':res['Author'],'Title':res['Title'],'size':res['Size'],'download_link':templink});
 		i+=1;
 	return jsonify({'data': links})
 
 def portBookToKindle(book_name):
 	print("Sending book: "+ book_name +" to kindle");
-	fromaddr=input("Enter your email address : ");
-	toaddr=input("Enter your kindle address to send book : ");
+	fromaddr="bookkeeper61611@yahoo.com";
+	toaddr="vivekvarma175_juo0vg@kindle.com";
 	msg = MIMEMultipart()
 	msg['From'] = fromaddr
 	msg['To'] = toaddr
@@ -82,9 +90,9 @@ def portBookToKindle(book_name):
 	encoders.encode_base64(p)
 	p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
 	msg.attach(p)
-	s = smtplib.SMTP('smtp.gmail.com', 587)
+	s = smtplib.SMTP('smtp.mail.yahoo.com', 587)
 	s.starttls()
-	password = getpass('please enter your email password || incase of two factor auth use generated app password from google : ')
+	password = "jlazkhixseoxzppo"
 	s.login(fromaddr, password);
 	text = msg.as_string()
 	s.sendmail(fromaddr, toaddr, text)
