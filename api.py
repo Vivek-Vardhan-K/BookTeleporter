@@ -38,8 +38,8 @@ def linksResolver(res,s):
 	download_links = s.resolve_download_links(res);
 	return download_links["GET"];
 
-@app.route('/download/<fname>', methods = ['GET'])	
-@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
+@app.route('/download/<fname>', methods = ['POST'])	
+@cross_origin()
 def downloadBook(fname: str):
 	url=request.headers.get('dlink');
 	fname2=fname
