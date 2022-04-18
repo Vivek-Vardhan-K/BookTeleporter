@@ -4,13 +4,24 @@ import "./search-component.css";
 import logo from "./main-logo.png";
 import axios from "axios";
 import Results from "../results-component/Results";
+import { useSelector } from "react-redux";
 
 function Search() {
   const [input, setInput] = useState("");
   const [search, setSearch] = useState(false);
   const [bookData, setBookData] = useState([]);
-  var searchHandler = (e) => {
-    axios.get(`http://127.0.0.1:5000/search/` + input).then((res) => {
+  const token = useSelector((state) => state.jwtToken);
+  const searchHandler = (inp) => {
+    console.log(inp);
+    console.log("ran bois");
+    axios({
+      method: "get",
+      url: `http://127.0.0.1:5000/search/` + inp,
+      data: {},
+      headers: {
+        Token: token,
+      },
+    }).then((res) => {
       // console.log(res.data);
       setSearch(true);
       setBookData(res.data);
@@ -28,12 +39,14 @@ function Search() {
             placeholder="Search"
             aria-label="Search"
             aria-describedby="search-addon"
-            onInput={(e) => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
           />
           <button
             type="button"
             className="btn btn-outline-primary"
-            onClick={searchHandler}
+            onClick={() => {
+              searchHandler(input);
+            }}
           >
             search
           </button>
@@ -41,7 +54,7 @@ function Search() {
       </div>
     );
   else {
-    return <Results bookData={bookData} />;
+    return <Results bookData={bookData} phold={input} trig={searchHandler} />;
   }
 }
 

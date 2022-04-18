@@ -2,62 +2,98 @@ import React from "react";
 import "./Results.css";
 import icon from "./kindle.png";
 import axios from "axios";
+import "react-awesome-button/dist/styles.css";
+import logo from "./../search-component/main-logo.png";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function Results(props) {
-  const byCaller = (link, name) => {
-    const headers = {
-      dlink: link,
-    };
-    // axios
-    //   .post("https://127.0.0.1:5000/download/" + name, { headers: headers })
-    //   .then(console.log("done!!!!"));
+  const [input, setinput] = useState(props.phold);
+  const token = useSelector((state) => state.jwtToken);
+  const byCaller = (id, name, searchText) => {
     axios({
-      method: "post", //you can set what request you want to be
+      method: "post",
       url: "http://127.0.0.1:5000/download/" + name,
       data: {},
       headers: {
-        dlink: link,
+        bookID: id,
+        Token: token,
+        search4: searchText,
       },
-    }).then(console.log(link));
+    }).then(console.log(id));
   };
-
   if (props.bookData.data != undefined) {
-    console.log(props.bookData);
-    var listItems = props.bookData.data.map((elem) => (
-      <tr key={elem.index} scope="row">
-        <td className="rowdet">{elem.index}</td>
+    // console.log(props.bookData);
+    var listItems = props.bookData.data.map((elem, idx) => (
+      <tr key={idx} scope="row">
+        <td className="rowdet">{idx + 1}</td>
         <td className="rowdet">
           <a href="#">{elem.Author}</a>
         </td>
         <td className="rowdet">{elem.Title}</td>
-        <td className="rowdet">{elem.size}</td>
+        <td className="rowdet">{elem.Year}</td>
+        <td className="rowdet">{elem.Size}</td>
         <td className="rowdet">
-          <img
-            src={icon}
-            className="resz"
-            onClick={() => {
-              byCaller(elem.download_link, elem.Title);
-            }}
-          />
+          <a href="#" title="">
+            <img
+              src={icon}
+              className="resz zoom"
+              onClick={() => {
+                byCaller(elem.ID, elem.Title, elem.search4);
+              }}
+            />
+          </a>
         </td>
       </tr>
     ));
-  } else {
-    return <div></div>;
   }
 
   return (
     <div>
-      <div>
+      <img src={logo} alt="Logo" className="rect-logo" />
+      <div className="container">
+        <input
+          className="form-control searcher"
+          type="text"
+          placeholder="Search book here .."
+          value={input}
+          onChange={(e) => {
+            setinput(e.target.value);
+          }}
+        />
+        <button
+          type="primary"
+          className="btn btn-primary rx-btn"
+          onClick={() => {
+            props.trig(input);
+          }}
+        >
+          Search
+        </button>
+      </div>
+      <div className="tabox">
         <div className="table-responsive custom-table-responsive">
           <table className="table custom-table">
             <thead>
               <tr>
-                <th scope="col">Index</th>
-                <th scope="col">Author</th>
-                <th scope="col">Book Name</th>
-                <th scope="col">Size</th>
-                <th scope="col">#</th>
+                <th scope="col" className="rowdet">
+                  Index
+                </th>
+                <th scope="col" className="rowdet">
+                  Author
+                </th>
+                <th scope="col" className="rowdet">
+                  Book Name
+                </th>
+                <th scope="col" className="rowdet">
+                  Year
+                </th>
+                <th scope="col" className="rowdet">
+                  Size
+                </th>
+                <th scope="col" className="rowdet">
+                  Send to Kindle
+                </th>
               </tr>
             </thead>
             <tbody>{listItems}</tbody>
