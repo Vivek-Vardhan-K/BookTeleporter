@@ -28,7 +28,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 nextToken = 0
 userObjectStorage = {}
 
-
 def dlinker(link):
     req = Request(link)
     html_page = urlopen(req)
@@ -37,15 +36,6 @@ def dlinker(link):
     for link in soup.findAll('a'):
         links.append(link.get('href'))
     return links[0];
-
-
-def linksResolver(pep):
-    getlinks = []
-    # for res in results:
-    # 	# print(res)
-    # 	download_links = s.resolve_download_links(res);
-    # 	getlinks.append(download_links["GET"])
-    return getlinks;
 
 
 @app.route('/download/<fname>', methods=['POST'])
@@ -59,9 +49,6 @@ def downloadBook(fname: str):
     title_filters = {"Extension": "pdf", "Language": "English"}
     results = s.search_title_filtered(name, title_filters, exact_match=True);
     todown = None
-    # for res in userObjectStorage[userToken]:
-    #     print(res)
-    # print(bookID)
     for res in userObjectStorage[userToken]:
         if res['ID'] == bookID:
             todown = res
@@ -94,20 +81,12 @@ def getBooks(name):
     results = s.search_title_filtered(name, title_filters, exact_match=True);
     i = 1;
     links = []
-    # with ThreadPoolExecutor(max_workers=10) as pool:
-    #     getlinks=list(pool.map(linksResolver,results));
     for res in results:
-        # print(type(res))
         print(res['ID']);
         print(i, ") ", res['Author'], "||", res['Title'], "||", res['Size'], "||", res['Extension'], "||", res['Year'])
-        # res['sObj'] = s
         temp=res
         temp['search4']=name
         links.append(temp)
-        # links.append(
-        #     {'index': i, 'bookID': res['ID'], 'Author': res['Author'], 'Title': res['Title'], 'size': res['Size'],
-        #      'download_obj': res, 'Year': res['Year']})
-
         i += 1
     temp = request.headers['Token']
     temp = str(temp)

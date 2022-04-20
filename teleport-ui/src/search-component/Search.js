@@ -16,7 +16,7 @@ function Search() {
     console.log("ran bois");
     axios({
       method: "get",
-      url: `http://127.0.0.1:5000/search/` + inp,
+      url: `https://teleportx.herokuapp.com//search/` + inp,
       data: {},
       headers: {
         Token: token,

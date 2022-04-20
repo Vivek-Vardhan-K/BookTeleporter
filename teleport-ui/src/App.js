@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 function App() {
   const dispatch = useDispatch();
   const loadDataOnlyOnce = () => {
-    axios.get("http://127.0.0.1:5000/getToken").then((res) => {
+    axios.get("https://teleportx.herokuapp.coms/getToken").then((res) => {
       console.log(res.data);
       dispatch({
         type: "UPDATE_TOKEN",

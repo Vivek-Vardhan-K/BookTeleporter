@@ -2,18 +2,18 @@ import React from "react";
 import "./Results.css";
 import icon from "./kindle.png";
 import axios from "axios";
-import "react-awesome-button/dist/styles.css";
 import logo from "./../search-component/main-logo.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 function Results(props) {
   const [input, setinput] = useState(props.phold);
   const token = useSelector((state) => state.jwtToken);
   const byCaller = (id, name, searchText) => {
     axios({
       method: "post",
-      url: "http://127.0.0.1:5000/download/" + name,
+      url: "https://teleportx.herokuapp.com/download/" + name,
       data: {},
       headers: {
         bookID: id,
@@ -23,7 +23,6 @@ function Results(props) {
     }).then(console.log(id));
   };
   if (props.bookData.data != undefined) {
-    // console.log(props.bookData);
     var listItems = props.bookData.data.map((elem, idx) => (
       <tr key={idx} scope="row">
         <td className="rowdet">{idx + 1}</td>
